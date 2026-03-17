@@ -32,3 +32,10 @@ python enum/run_path_comparison_grid.py \
 - `same_edges/same_left/same_right`: strict equality checks.
 
 If overlap is low, path order changes the final result significantly.
+
+## Relative-change metrics (new)
+
+- `edge_retention_p1_vs_original`, `edge_retention_p2_vs_original`: how much of original edges remain in each path.
+- `sim_after_ab_ratio`: extra shrink from SIM after AB-core in Path 1.
+- `ab_after_sim_ratio`: extra shrink from AB after SIM-filtering in Path 2.
+- `final_edge_path_gap`, `final_left_path_gap`, `final_right_path_gap`: normalized final gap between the two paths.
