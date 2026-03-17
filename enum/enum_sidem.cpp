@@ -13,6 +13,15 @@
 using json = nlohmann::json;
 using namespace std;
 
+enum class SimMode { Both, LeftOnly, RightOnly };
+SimMode sim_mode = SimMode::Both;
+
+bool should_apply_similarity(bool selecting_left_vertices) {
+    if (sim_mode == SimMode::Both) return true;
+    if (sim_mode == SimMode::LeftOnly) return selecting_left_vertices;
+    return !selecting_left_vertices;
+}
+
 unordered_map<string, vector<string>> graph;
 unordered_map<string, vector<string>> L_nei;
 unordered_map<string, vector<string>> R_nei;
@@ -86,12 +95,14 @@ void enumerate_comb(vector<string> candidate_L, vector<string> candidate_R, bool
 
             candidate.push_back(v);
             vector<string> curr_nei_new;
-            if (all_nei.count(v)) {
+            if (should_apply_similarity(L_status) && all_nei.count(v)) {
                 for (const auto& e : curr_nei) {
                     if (find(all_nei.at(v).begin(), all_nei.at(v).end(), e) != all_nei.at(v).end()) {
                         curr_nei_new.push_back(e);
                     }
                 }
+            } else {
+                curr_nei_new = curr_nei;
             }
 
             if (L_status) {
@@ -135,6 +146,13 @@ int main(int argc, char* argv[]) {
     cout << "input similarity: ";
     cin >> similarity;
 
+    string sim_mode_input;
+    cout << "input sim mode (both/sim_left/sim_right): ";
+    cin >> sim_mode_input;
+    if (sim_mode_input == "sim_left") sim_mode = SimMode::LeftOnly;
+    else if (sim_mode_input == "sim_right") sim_mode = SimMode::RightOnly;
+    else sim_mode = SimMode::Both;
+
     if (argc > 1 && string(argv[1]) == "-d") {
         cout << "input alpha: ";
         cin >> a;
@@ -146,8 +164,17 @@ int main(int argc, char* argv[]) {
         similarity += '0';
     }
 
-    string L_filename = graph_name + "cpp_nei_VL_" + similarity + ".json";
-    string R_filename = graph_name + "cpp_nei_VR_" + similarity + ".json";
+    string L_filename, R_filename;
+    if (sim_mode == SimMode::LeftOnly) {
+        L_filename = graph_name + "cpp_nei_sim_left_VL" + similarity + ".json";
+        R_filename = graph_name + "cpp_nei_sim_left_VR" + similarity + ".json";
+    } else if (sim_mode == SimMode::RightOnly) {
+        L_filename = graph_name + "cpp_nei_sim_right_VL" + similarity + ".json";
+        R_filename = graph_name + "cpp_nei_sim_right_VR" + similarity + ".json";
+    } else {
+        L_filename = graph_name + "cpp_nei_VL_" + similarity + ".json";
+        R_filename = graph_name + "cpp_nei_VR_" + similarity + ".json";
+    }
     
     load_json(L_filename, L_nei);
     load_json(R_filename, R_nei);
