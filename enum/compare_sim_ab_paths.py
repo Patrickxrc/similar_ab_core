@@ -182,6 +182,17 @@ def jaccard(a: Set, b: Set) -> float:
     return len(a & b) / len(u)
 
 
+def safe_ratio(numerator: int, denominator: int) -> float:
+    if denominator == 0:
+        return 0.0
+    return numerator / denominator
+
+
+def relative_gap(v1: int, v2: int) -> float:
+    base = max(1, v1, v2)
+    return (v1 - v2) / base
+
+
 def summarize(g: BiGraph) -> Dict[str, int]:
     return {
         "left_nodes": len(g.left_nodes),
@@ -217,6 +228,17 @@ def main():
     left_overlap = jaccard(g1_final.left_nodes, g2_final.left_nodes)
     right_overlap = jaccard(g1_final.right_nodes, g2_final.right_nodes)
 
+    orig_edges = len(g0.edges)
+    p1_ab_edges = len(g1_ab.edges)
+    p1_final_edges = len(g1_final.edges)
+    p2_sim_edges = len(g2_sim.edges)
+    p2_final_edges = len(g2_final.edges)
+
+    p1_final_left = len(g1_final.left_nodes)
+    p2_final_left = len(g2_final.left_nodes)
+    p1_final_right = len(g1_final.right_nodes)
+    p2_final_right = len(g2_final.right_nodes)
+
     result = {
         "input": {
             "edge_file": args.edge_file,
@@ -241,6 +263,15 @@ def main():
             "exact_same_edges": g1_final.edges == g2_final.edges,
             "exact_same_left": g1_final.left_nodes == g2_final.left_nodes,
             "exact_same_right": g1_final.right_nodes == g2_final.right_nodes,
+        },
+        "relative": {
+            "edge_retention_p1_vs_original": safe_ratio(p1_final_edges, orig_edges),
+            "edge_retention_p2_vs_original": safe_ratio(p2_final_edges, orig_edges),
+            "sim_after_ab_ratio": safe_ratio(p1_final_edges, p1_ab_edges),
+            "ab_after_sim_ratio": safe_ratio(p2_final_edges, p2_sim_edges),
+            "final_edge_path_gap": relative_gap(p1_final_edges, p2_final_edges),
+            "final_left_path_gap": relative_gap(p1_final_left, p2_final_left),
+            "final_right_path_gap": relative_gap(p1_final_right, p2_final_right),
         },
     }
 

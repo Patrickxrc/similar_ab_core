@@ -58,6 +58,13 @@ def main():
             'same_edges': data['overlap']['exact_same_edges'],
             'same_left': data['overlap']['exact_same_left'],
             'same_right': data['overlap']['exact_same_right'],
+            'edge_retention_p1_vs_original': data['relative']['edge_retention_p1_vs_original'],
+            'edge_retention_p2_vs_original': data['relative']['edge_retention_p2_vs_original'],
+            'sim_after_ab_ratio': data['relative']['sim_after_ab_ratio'],
+            'ab_after_sim_ratio': data['relative']['ab_after_sim_ratio'],
+            'final_edge_path_gap': data['relative']['final_edge_path_gap'],
+            'final_left_path_gap': data['relative']['final_left_path_gap'],
+            'final_right_path_gap': data['relative']['final_right_path_gap'],
         }
         rows.append(row)
         print(f"done: {graph} a={a} b={b} sim={sim} mode={mode}")
