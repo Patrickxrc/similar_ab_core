@@ -1,0 +1,5 @@
+# Generated archives
+*.tar.gz
+
+# Generated figures
+enum/figures_6case/*.png
