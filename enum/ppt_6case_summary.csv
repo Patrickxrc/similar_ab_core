@@ -1,0 +1,7 @@
+Case,mode,alpha,beta,sim,Path1_final_edges_AB_to_SIM,Path2_final_edges_SIM_to_AB,edge_jaccard,final_edge_path_gap,status
+1,sim_left,2,3,0.16,1654,312,0.18719806763285024,0.81136638452237,middle_state
+2,both,2,3,0.16,1654,312,0.18719806763285024,0.81136638452237,middle_state
+3,sim_left,2,2,0.18,1355,28,0.020664206642066422,0.9793357993357934,near_collapse
+4,both,2,2,0.18,1355,28,0.020664206642066422,0.9793357993357934,near_collapse
+5,sim_left,3,3,0.2,1261,0,0.0,1.0,collapse_path2
+6,both,3,3,0.2,1261,0,0.0,1.0,collapse_path2
